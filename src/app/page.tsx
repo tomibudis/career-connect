@@ -2,19 +2,20 @@
 
 import { JobCard } from '@/components/job-card';
 import { JobFilters } from '@/components/job-filters';
-// import { jobs } from '@/constants/mock-data-jobs';
 import Link from 'next/link';
 import { useGetJobs } from '@/hooks/query/use-get-jobs';
 import { useQueryParam, useQueryParams } from '@/hooks/update-query-params';
 import { formatRelativeDate } from '@/lib/date';
-import { GalleryVerticalEnd } from 'lucide-react';
 import { CareerConnectLogo } from '@/components/career-connect-logo';
+import { PaginationTableJob } from '@/components/table-job/pagination';
 
 export default function Home() {
   const [queryParams] = useQueryParams({
     location: 'all',
     job_type: 'all',
   });
+  const [currentPage, setCurrentPage] = useQueryParam<number>('page', 1);
+  const PER_PAGE = 10;
 
   const locationQuery =
     queryParams?.location === 'all' ? undefined : queryParams?.location;
@@ -23,8 +24,11 @@ export default function Home() {
   const { data, isLoading, isError } = useGetJobs({
     location: locationQuery,
     jobType: jobTypeQuery,
+    page: Number(currentPage),
+    pageSize: PER_PAGE,
   });
   const jobs = data?.jobs || [];
+  const totalPages = Math.ceil((data?.total ?? 0) / PER_PAGE);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -85,6 +89,13 @@ export default function Home() {
               </Link>
             ))
           )}
+        </div>
+        <div className="py-4 flex justify-center">
+          <PaginationTableJob
+            currentPage={Number(currentPage)}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </div>
     </div>

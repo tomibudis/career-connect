@@ -96,8 +96,8 @@ export const TableJob = () => {
               </TableHeader>
               <TableBody>
                 {isLoading && <LoaderTable />}
-                {isError && <ErrorTable />}
-                {jobs.length === 0 && <NoFoundData />}
+                {isError && !isLoading && <ErrorTable />}
+                {jobs.length === 0 && !isLoading && !isError && <NoFoundData />}
                 {jobs.map((job, i) => (
                   <TableRow
                     key={job.id}

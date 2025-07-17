@@ -148,14 +148,12 @@
   h5,
   h6 {
     line-height: 1.1;
-    margin-top: 2.5rem;
     text-wrap: pretty;
   }
 
   h1,
   h2 {
-    margin-top: 3.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   h1 {
@@ -230,4 +228,9 @@
 
 .ProseMirror li {
   margin-bottom: 0.25rem;
+}
+
+.ProseMirror p:empty {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
