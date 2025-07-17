@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Career Connect
 
-## Getting Started
+A modern job board platform built with Next.js, TypeScript, and Supabase. This project enables users to browse, post, and manage job listings with a clean UI and robust authentication.
 
-First, run the development server:
+## 🛠️ Setup Instructions
+
+### Prerequisites
+
+- Node.js (v20+ recommended)
+- npm or yarn
+- Supabase account (for backend)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/career-connect.git
+cd career-connect
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env.local` file in the root directory and add your Supabase credentials:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+### 4. Run the Development Server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧑‍💻 Approach
 
-## Learn More
+- **Modern Stack**: Built with Next.js App Router, React, and TypeScript for type safety and scalability.
+- **Authentication**: Uses Supabase Auth for secure user sign-up, login, and session management.
+- **Job Management**: Authenticated users can create, edit, and delete job postings. Public users can browse and filter jobs.
+- **Component-Driven**: UI is composed of reusable components for forms, tables, dialogs, and more.
+- **API Routes**: Next.js API routes handle backend logic and integrate with Supabase.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏗️ Architecture Overview
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+career-connect/
+├── src/
+│   ├── app/                # Next.js app directory (routing, pages, layouts)
+│   │   ├── (auth)/         # Authenticated routes (dashboard, job management)
+│   │   ├── (public)/       # Public routes (job listings, login, signup)
+│   │   └── api/            # API routes (e.g., auth confirmation)
+│   ├── components/         # Reusable UI and feature components
+│   ├── constants/          # Static data (job types, locations)
+│   ├── context/            # React context providers (user, global state)
+│   ├── hooks/              # Custom React hooks (queries, mutations)
+│   ├── lib/                # Utility functions and Supabase client setup
+│   └── middleware.ts       # Next.js middleware (auth, redirects)
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── ...                     # Config files, README, etc.
+```
 
-## Deploy on Vercel
+## 🙏 What would you improve if given more time?
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Enhance the homepage UI to create a visually stunning and engaging experience that attracts more users
+- Expand authentication options to include login with Google, GitHub, and Apple, and implement a "forgot password" feature
+- Add feature to apply job
+- Add feature save job
+- Add new toolbar leverage AI to writing or correction wording on job description
+- Add advance filter on homepage
+- Add recommendation job on detail page
