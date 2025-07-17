@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { GalleryVerticalEnd } from 'lucide-react';
@@ -10,11 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-
-const mockUser = {
-  name: 'Alex Doe',
-  email: 'alex.doe@email.com',
-};
+import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/user-provider';
 
 function getInitials(name: string) {
   return name
@@ -25,6 +25,14 @@ function getInitials(name: string) {
 }
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleLogout = () => {
+    const supabase = createClient();
+    supabase.auth.signOut();
+    router.push('/login');
+  };
   return (
     <div className="min-h-screen bg-muted">
       {/* Navbar */}
@@ -40,27 +48,32 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-muted-foreground hidden sm:block">
-              {mockUser.name}
+              {user?.user_metadata?.full_name}
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Avatar>
                     <AvatarFallback>
-                      {getInitials(mockUser.name)}
+                      {getInitials(user?.user_metadata?.full_name || '')}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
-                  <div className="font-semibold">{mockUser.name}</div>
+                  <div className="font-semibold">
+                    {user?.user_metadata?.full_name}
+                  </div>
                   <div className="text-xs text-muted-foreground">
-                    {mockUser.email}
+                    {user?.user_metadata?.email}
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive cursor-pointer">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-destructive cursor-pointer"
+                >
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

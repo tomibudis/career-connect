@@ -15,6 +15,9 @@ import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { toast } from 'sonner';
+import { signup } from '@/app/(public)/signup/actions';
+import { Checkbox } from '../ui/checkbox';
 
 const signupSchema = z
   .object({
@@ -25,6 +28,11 @@ const signupSchema = z
     confirmPassword: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters' }),
+    full_name: z.string().min(2, { message: 'Full name is required.' }),
+    phone: z.string().optional(),
+    agree: z.boolean().refine((val) => val === true, {
+      message: 'You must agree to the terms.',
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -39,19 +47,50 @@ export function SignupForm() {
     defaultValues: {
       email: '',
       password: '',
+      full_name: '',
+      phone: '',
+      agree: false,
       confirmPassword: '',
     },
   });
 
-  function onSubmit(values: SignupFormValues) {
-    // TODO: handle signup
-    console.log(values);
+  async function onSubmit(data: SignupFormValues) {
+    const { error } = await signup({
+      email: data.email,
+      password: data.password,
+      phone: data.phone,
+      options: {
+        data: {
+          full_name: data.full_name,
+        },
+      },
+    });
+    if (error) {
+      toast(error.message);
+    }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
+          <FormField
+            control={form.control}
+            name="full_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your full name"
+                    type="text"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -99,7 +138,52 @@ export function SignupForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone (optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your phone number"
+                    type="text"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="agree"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="flex items-center">
+                    <Checkbox
+                      id="agree"
+                      defaultChecked={!!field.value}
+                      onCheckedChange={(val) => field.onChange(val)}
+                    />
+                    <label
+                      htmlFor="agree"
+                      className="ml-2 text-sm text-gray-600"
+                    >
+                      I agree to the terms and conditions
+                    </label>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="w-full"
+            loading={form.formState.isSubmitting}
+          >
             Sign Up
           </Button>
         </div>

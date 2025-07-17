@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import Link from 'next/link';
+import { login } from '@/app/(public)/login/actions';
+import { toast } from 'sonner';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -32,16 +34,23 @@ export function LoginForm() {
       email: '',
       password: '',
     },
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
   });
 
-  function onSubmit(values: LoginFormValues) {
-    // TODO: handle login
-    console.log(values);
-  }
+  const onSubmitForm = async (formValues: LoginFormValues) => {
+    const { error } = await login({
+      email: formValues.email,
+      password: formValues.password,
+    });
+    if (error.message) {
+      toast(error.message);
+    }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmitForm)}>
         <div className="flex flex-col gap-6">
           <FormField
             control={form.control}
@@ -76,7 +85,11 @@ export function LoginForm() {
             )}
           />
           <div className="flex flex-col gap-3">
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              loading={form.formState.isSubmitting}
+            >
               Login
             </Button>
           </div>

@@ -23,7 +23,7 @@ export default function Page() {
           CareerConnect.
         </Link>
         <div className="flex flex-col gap-6">
-          <Card>
+          <Card className="py-6">
             <CardHeader>
               <CardTitle className="text-xl">Welcome back</CardTitle>
               <CardDescription>
