@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -8,10 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useQueryParam } from '@/hooks/update-query-params';
+import { LOCATION_OPTIONS } from '@/constants/location-options';
+import { JOB_TYPE_OPTIONS } from '@/constants/job-type-options';
 
 export function JobFilters() {
-  const [location, setLocation] = useState<string>('');
-  const [jobType, setJobType] = useState<string>('');
+  const [location, setLocation] = useQueryParam<string>('location', 'all');
+  const [jobType, setJobType] = useQueryParam<string>('job_type', 'all');
 
   return (
     <div className="bg-white border rounded-lg p-4 mb-6">
@@ -26,11 +28,11 @@ export function JobFilters() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All locations</SelectItem>
-              <SelectItem value="new-york">New York, NY</SelectItem>
-              <SelectItem value="san-francisco">San Francisco, CA</SelectItem>
-              <SelectItem value="remote">Remote</SelectItem>
-              <SelectItem value="london">London, UK</SelectItem>
-              <SelectItem value="berlin">Berlin, Germany</SelectItem>
+              {LOCATION_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -45,10 +47,11 @@ export function JobFilters() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All types</SelectItem>
-              <SelectItem value="full-time">Full-Time</SelectItem>
-              <SelectItem value="part-time">Part-Time</SelectItem>
-              <SelectItem value="contract">Contract</SelectItem>
-              <SelectItem value="freelance">Freelance</SelectItem>
+              {JOB_TYPE_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

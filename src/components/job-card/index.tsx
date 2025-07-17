@@ -60,14 +60,17 @@ function Type({ children }: { children: React.ReactNode }) {
 function Description({ children }: { children: React.ReactNode }) {
   return (
     <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-      {children}
+      <div
+        className="ProseMirror"
+        dangerouslySetInnerHTML={{ __html: children as string }}
+      />
     </p>
   );
 }
 
 function Location({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center mb-2 sm:mb-0">
+    <div className="flex items-center mb-2 sm:mb-0 capitalize">
       <MapPin className="w-4 h-4 mr-1" />
       {children}
     </div>

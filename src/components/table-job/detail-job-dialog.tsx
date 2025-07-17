@@ -17,7 +17,7 @@ export const DetailJobDialog: React.FC<DetailJobDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl p-0 overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[80vh] p-0 overflow-y-auto">
         {isLoading ? (
           <div className="p-8 text-center">Loading...</div>
         ) : isError ? (

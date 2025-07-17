@@ -22,6 +22,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import { JOB_TYPE_OPTIONS } from '@/constants/job-type-options';
+import { LOCATION_OPTIONS } from '@/constants/location-options';
 import { useJobCreate } from '@/hooks/mutation/use-job-create';
 import { useJobUpdate } from '@/hooks/mutation/use-job-update';
 import { useUser } from '@/context/user-provider';
@@ -169,7 +170,23 @@ export function FormJobCreate({ initialValues }: { initialValues?: Job }) {
             <FormItem>
               <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Remote or City, Country" {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  name={field.name}
+                  required
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {LOCATION_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
