@@ -15,6 +15,8 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/user-provider';
+import { CareerConnectLogo } from '@/components/career-connect-logo';
+import Link from 'next/link';
 
 function getInitials(name: string) {
   return name
@@ -38,14 +40,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Navbar */}
       <nav className="bg-background border-b">
         <div className="max-w-5xl w-full px-4 py-3 flex items-center justify-between mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md">
-              <GalleryVerticalEnd className="size-5" />
-            </div>
-            <span className="font-semibold text-lg tracking-tight">
-              CareerConnect
-            </span>
-          </div>
+          <Link href="/">
+            <CareerConnectLogo />
+          </Link>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-muted-foreground hidden sm:block">
               {user?.user_metadata?.full_name}

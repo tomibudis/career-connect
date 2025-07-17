@@ -5,15 +5,21 @@ import { JobFilters } from '@/components/job-filters';
 // import { jobs } from '@/constants/mock-data-jobs';
 import Link from 'next/link';
 import { useGetJobs } from '@/hooks/query/use-get-jobs';
-import { useQueryParam } from '@/hooks/update-query-params';
+import { useQueryParam, useQueryParams } from '@/hooks/update-query-params';
 import { formatRelativeDate } from '@/lib/date';
+import { GalleryVerticalEnd } from 'lucide-react';
+import { CareerConnectLogo } from '@/components/career-connect-logo';
 
 export default function Home() {
-  const [location] = useQueryParam<string>('location', 'all');
-  const [jobType] = useQueryParam<string>('job_type', 'all');
+  const [queryParams] = useQueryParams({
+    location: 'all',
+    job_type: 'all',
+  });
 
-  const locationQuery = location === 'all' ? undefined : location;
-  const jobTypeQuery = jobType === 'all' ? undefined : jobType;
+  const locationQuery =
+    queryParams?.location === 'all' ? undefined : queryParams?.location;
+  const jobTypeQuery =
+    queryParams?.job_type === 'all' ? undefined : queryParams?.job_type;
   const { data, isLoading, isError } = useGetJobs({
     location: locationQuery,
     jobType: jobTypeQuery,
@@ -22,7 +28,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <nav className="bg-background border-b">
+        <div className="max-w-5xl w-full px-4 py-3 flex items-center justify-between mx-auto">
+          <Link href="/">
+            <CareerConnectLogo />
+          </Link>
+          <div className="flex items-center gap-3">
+            <p className="text-muted-foreground text-xs mt-1">
+              Want to post a job? Go to your{' '}
+              <Link href="/dashboard" className="underline hover:text-primary">
+                console
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </nav>
+      <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">
             Browse Jobs

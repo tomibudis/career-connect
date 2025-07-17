@@ -59,12 +59,12 @@ function Type({ children }: { children: React.ReactNode }) {
 
 function Description({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+    <div className="text-sm text-muted-foreground mb-4 line-clamp-2">
       <div
         className="ProseMirror"
         dangerouslySetInnerHTML={{ __html: children as string }}
       />
-    </p>
+    </div>
   );
 }
 

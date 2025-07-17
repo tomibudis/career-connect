@@ -1,15 +1,38 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { notFound } from 'next/navigation';
-import { jobs } from '@/constants/mock-data-jobs';
+import { useGetJobDetail } from '@/hooks/query/use-get-job-detail';
+import React from 'react';
+import { formatRelativeDate } from '@/lib/date';
 
-export default function JobDetail({ params }: { params: { id: string } }) {
-  const { id } = params;
-  const job = jobs.find((j) => j.id == id);
+export default function JobDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = React.use(params);
+  const { data: job, isLoading, error } = useGetJobDetail(id);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        Error loading job details.
+      </div>
+    );
+  }
 
   if (!job) {
-    notFound();
+    return null; // handled by useEffect
   }
 
   return (
@@ -31,7 +54,9 @@ export default function JobDetail({ params }: { params: { id: string } }) {
               <h1 className="text-2xl font-semibold text-gray-900 mb-2">
                 {job.title}
               </h1>
-              <p className="text-lg text-muted-foreground">{job.company}</p>
+              <p className="text-lg text-muted-foreground">
+                {job.company_name}
+              </p>
             </div>
             <Button size="lg" className="sm:ml-4">
               Apply Now
@@ -45,11 +70,13 @@ export default function JobDetail({ params }: { params: { id: string } }) {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900 mb-1">Job Type</p>
-              <p className="text-sm text-muted-foreground">{job.type}</p>
+              <p className="text-sm text-muted-foreground">{job.job_type}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-900 mb-1">Posted</p>
-              <p className="text-sm text-muted-foreground">{job.posted}</p>
+              <p className="text-sm text-muted-foreground">
+                {formatRelativeDate(job.created_at)}
+              </p>
             </div>
           </div>
 
@@ -58,37 +85,9 @@ export default function JobDetail({ params }: { params: { id: string } }) {
               <h2 className="text-lg font-semibold text-gray-900 mb-3">
                 Job Description
               </h2>
-              <div className="prose prose-sm max-w-none text-muted-foreground">
-                <p className="mb-4">{job.fullDescription}</p>
+              <div className="prose prose-sm max-w-none text-muted-foreground ProseMirror">
+                <div dangerouslySetInnerHTML={{ __html: job.description }} />
               </div>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
-                Requirements
-              </h2>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {job.requirements.map((req, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    {req}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
-                Benefits
-              </h2>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {job.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
 
