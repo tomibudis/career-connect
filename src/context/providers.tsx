@@ -9,7 +9,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <QueryClientProvider client={queryClient}>
         <UserProvider>{children}</UserProvider>
         <Toaster />
