@@ -6,9 +6,15 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { FormJobCreate } from '@/components/form-job-create';
 import { useGetJobDetail } from '@/hooks/query/use-get-job-detail';
+import React from 'react';
 
-export default function EditJobPage({ params }: { params: { id: string } }) {
-  const { data: job, isLoading } = useGetJobDetail(params.id);
+export default function EditJobPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = React.use(params);
+  const { data: job, isLoading } = useGetJobDetail(id);
 
   return (
     <>
