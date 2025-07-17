@@ -84,3 +84,4 @@ career-connect/
 - Add new toolbar leverage AI to writing or correction wording on job description
 - Add advance filter on homepage
 - Add recommendation job on detail page
+- Add comprehensive unit tests to ensure application stability and reliability
